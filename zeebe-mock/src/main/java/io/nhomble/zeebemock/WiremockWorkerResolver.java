@@ -40,9 +40,7 @@ public class WiremockWorkerResolver implements WorkerResolver {
                             Object o = stub.getMetadata().getMetadata("zeebemock").getOrDefault("tenantIds", new ArrayList<>());
                             List<?> l = o instanceof List ? (List<?>) o : new ArrayList<>();
                             List<String> ret = new ArrayList<>();
-                            if (l != null) {
-                                l.stream().filter(t -> t instanceof String).forEach(t -> ret.add((String) t));
-                            }
+                            l.stream().filter(t -> t instanceof String).forEach(t -> ret.add((String) t));
                             return ret;
                         },
                         (curr, next) -> {
