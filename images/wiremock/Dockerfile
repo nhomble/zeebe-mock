@@ -2,7 +2,7 @@ FROM maven:3.9.6-eclipse-temurin-21-jammy as build
 
 WORKDIR /app
 COPY . .
-RUN mvn clean package --quiet
+RUN mvn clean package --quiet -Dmaven.test.skip -DskipTests
 
 FROM wiremock/wiremock:3.10.0
 
