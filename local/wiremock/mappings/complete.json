@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/COMPLETE_WORKER"
+  },
+  "response": {
+    "jsonBody": {
+      "command": "COMPLETE",
+      "variables": {
+        "hello": "world"
+      }
+    }
+  },
+  "metadata": {
+    "zeebemock": {
+      "enabled": true
+    }
+  }
+}

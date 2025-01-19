@@ -1,0 +1,9 @@
+camunda:
+  client:
+    mode: self-managed
+    zeebe:
+      enabled: true
+      grpc-address: http://localhost:26500
+      prefer-rest-over-grpc: false
+zeebemock:
+  wiremockURI: http://localhost:8080

@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/TRIGGER_CHILD_WORKFLOW"
+  },
+  "response": {
+    "jsonBody": {
+      "command": "COMPLETE",
+      "variables": {
+        "child": "triggered"
+      }
+    }
+  },
+  "serveEventListeners": [
+    {
+      "name": "zeebemock/create-process-instance",
+      "requestPhases": [
+        "BEFORE_RESPONSE_SENT"
+      ],
+      "parameters": {
+        "bpmnProcessId": "SimpleComplete",
+        "variables": {
+          "parent": {
+            "value": "triggered",
+            "type": "String"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "zeebemock": {
+      "enabled": true
+    }
+  }
+}

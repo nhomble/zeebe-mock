@@ -1,0 +1,26 @@
+services:
+  wiremock:
+    build:
+      context: ..
+      dockerfile: ./images/wiremock/Dockerfile
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+      - ./wiremock/__files:/home/wiremock/__files
+    environment:
+      ZEEBE_GRPC_ADDRESS: http://zeebe:26500
+      ZEEBE_REST_ADDRESS: http://zeebe:8088
+      ZEEBE_PREFER_REST_OVER_GRPC: false
+      ZEEBE_INSECURE_CONNECTION: true
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    networks:
+      - local_camunda-platform
+      - local_default
+
+networks:
+  local_camunda-platform:
+    external: true
+  local_default:
+    external: true

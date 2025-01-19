@@ -1,0 +1,9 @@
+${AnsiBackground.BLACK}
+${AnsiColor.BLUE} _____${AnsiColor.YELLOW}         _          _____         _
+${AnsiColor.BLUE}|__   |___ ___| |_ ___${AnsiColor.YELLOW}   |     |___ ___| |_
+${AnsiColor.BLUE}|   __| -_| -_| . | -_|${AnsiColor.YELLOW}  | | | | . |  _| '_|
+${AnsiColor.BLUE}|_____|___|___|___|___|${AnsiColor.YELLOW}  |_|_|_|___|___|_,_|
+
+${application.title} ${application.version}
+Powered by Spring Boot ${spring-boot.version}
+${AnsiBackground.DEFAULT}${AnsiColor.DEFAULT}
