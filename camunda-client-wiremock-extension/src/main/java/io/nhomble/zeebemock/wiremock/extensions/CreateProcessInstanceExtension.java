@@ -1,19 +1,28 @@
 package io.nhomble.zeebemock.wiremock.extensions;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.common.Metadata;
 import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ServeEventListener;
+import com.github.tomakehurst.wiremock.extension.WireMockServices;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import com.google.common.base.Preconditions;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.command.CreateProcessInstanceCommandStep1;
 
+import java.util.Map;
+
 public class CreateProcessInstanceExtension implements ServeEventListener {
 
     private final ZeebeClient zeebeClient;
+    private final WireMockServices wireMockServices;
+    private final ObjectMapper objectMapper;
 
-    public CreateProcessInstanceExtension()  {
+    public CreateProcessInstanceExtension(WireMockServices wireMockServices) {
         this.zeebeClient = ZeebeClient.newClient();
+        this.wireMockServices = wireMockServices;
+        this.objectMapper = new ObjectMapper();
     }
 
     @Override
@@ -32,8 +41,8 @@ public class CreateProcessInstanceExtension implements ServeEventListener {
 
         boolean hasVersion = parameters.get("version") != null;
         boolean hasWithResult = parameters.get("withResult") != null;
-        var withProcessId = zeebeClient.newCreateInstanceCommand()
-                .bpmnProcessId(parameters.getString("bpmnProcessId"));
+        var withProcessId = zeebeClient.newCreateInstanceCommand().bpmnProcessId(parameters.getString("bpmnProcessId"));
+        Map<String, Object> context = this.wireMockServices.getTemplateEngine().buildModelForRequest(serveEvent.getRequest());
         CreateProcessInstanceCommandStep1.CreateProcessInstanceCommandStep3 withVersion;
         if (hasVersion) {
             withVersion = withProcessId.version(parameters.getInt("version"));
@@ -41,12 +50,19 @@ public class CreateProcessInstanceExtension implements ServeEventListener {
             withVersion = withProcessId.latestVersion();
         }
 
-        var withVariables = withVersion.variables(parameters.getMetadata("variables", new Metadata()));
+        try {
+            String json = objectMapper.writeValueAsString(parameters.getMetadata("variables", new Metadata()));
+            String templated = this.wireMockServices.getTemplateEngine().getUncachedTemplate(json).apply(context);
+            var withVariables = withVersion.variables(templated);
 
-        if (hasWithResult) {
-            withVariables.withResult().send().join();
-        } else {
-            withVariables.send().join();
+            if (hasWithResult) {
+                withVariables.withResult().send().join();
+            } else {
+                withVariables.send().join();
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
+
     }
 }

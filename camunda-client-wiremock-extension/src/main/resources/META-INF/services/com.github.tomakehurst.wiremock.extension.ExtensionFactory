@@ -1,0 +1,2 @@
+io.nhomble.zeebemock.wiremock.extensions.CreateProcessInstanceExtensionFactory
+io.nhomble.zeebemock.wiremock.extensions.PublishMessageExtensionFactory

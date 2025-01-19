@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1n71z9l" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.28.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.6.0">
+  <bpmn:process id="TriggerEvent" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:extensionElements>
+        <zeebe:properties>
+          <zeebe:property name="camundaModeler:exampleOutputJson" value="{&#34;id&#34;: &#34;123&#34;}" />
+        </zeebe:properties>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0zfxy21</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0zfxy21" sourceRef="StartEvent_1" targetRef="Activity_1cujknw" />
+    <bpmn:sequenceFlow id="Flow_1tuny5o" sourceRef="Activity_1cujknw" targetRef="Activity_1hh5l1h" />
+    <bpmn:endEvent id="Event_0gnra8f">
+      <bpmn:incoming>Flow_1kjscyp</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1kjscyp" sourceRef="Activity_1hh5l1h" targetRef="Event_0gnra8f" />
+    <bpmn:serviceTask id="Activity_1cujknw" name="Trigger Event">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="TRIGGER_EVENT" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0zfxy21</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tuny5o</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:receiveTask id="Activity_1hh5l1h" name="Wait" messageRef="Message_0asvdak">
+      <bpmn:incoming>Flow_1tuny5o</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kjscyp</bpmn:outgoing>
+    </bpmn:receiveTask>
+    <bpmn:textAnnotation id="TextAnnotation_0t488dn">
+      <bpmn:text>pass id</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1gruy47" associationDirection="None" sourceRef="StartEvent_1" targetRef="TextAnnotation_0t488dn" />
+  </bpmn:process>
+  <bpmn:message id="Message_0asvdak" name="TEST_EVENT">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=id" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TriggerEvent">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gnra8f_di" bpmnElement="Event_0gnra8f">
+        <dc:Bounds x="592" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0cq32yr_di" bpmnElement="Activity_1cujknw">
+        <dc:Bounds x="270" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ior1e9_di" bpmnElement="Activity_1hh5l1h">
+        <dc:Bounds x="430" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1gruy47_di" bpmnElement="Association_1gruy47">
+        <di:waypoint x="208" y="163" />
+        <di:waypoint x="258" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zfxy21_di" bpmnElement="Flow_0zfxy21">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="270" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tuny5o_di" bpmnElement="Flow_1tuny5o">
+        <di:waypoint x="370" y="177" />
+        <di:waypoint x="430" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kjscyp_di" bpmnElement="Flow_1kjscyp">
+        <di:waypoint x="530" y="177" />
+        <di:waypoint x="592" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0t488dn_di" bpmnElement="TextAnnotation_0t488dn">
+        <dc:Bounds x="220" y="70" width="100" height="30" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

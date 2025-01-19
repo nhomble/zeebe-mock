@@ -1,31 +1,26 @@
 {
   "request": {
     "method": "POST",
-    "url": "/TRIGGER_CHILD_WORKFLOW"
+    "url": "/TRIGGER_EVENT"
   },
   "response": {
     "jsonBody": {
       "command": "COMPLETE",
       "variables": {
-        "child": "triggered child workflow"
+        "child": "trigger event"
       }
     }
   },
   "serveEventListeners": [
     {
-      "name": "zeebemock/create-process-instance",
+      "name": "zeebemock/publish-message",
       "requestPhases": [
         "BEFORE_RESPONSE_SENT"
       ],
       "parameters": {
-        "bpmnProcessId": "SimpleComplete",
-        "variables": {
-          "parent": {
-            "value": "triggered",
-            "type": "String",
-            "id": "{{ request.id }}"
-          }
-        }
+        "messageName": "TEST_EVENT",
+        "correlationKey": "{{ jsonPath request.body '$.variablesAsMap.id' }}",
+        "timeToLive": "PT10S"
       }
     }
   ],
