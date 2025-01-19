@@ -2,9 +2,9 @@ package io.nhomble.zeebemock;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.worker.JobWorker;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
@@ -28,8 +28,8 @@ public class WorkerBootstrap {
         this.zeebeMockConfigurationProperties = zeebeMockConfigurationProperties;
     }
 
-    @PostConstruct()
-    void registerWorkers() throws URISyntaxException {
+    @Scheduled(fixedRateString = "#{@zeebeMockProperties.getWorkerRefreshInterval()}")
+    void registerWorkers() {
         log.info("Closing existing active workers number={}", activeWorkers.size());
         activeWorkers.forEach(JobWorker::close);
         for (WorkerDefinition worker : workerResolver.resolve()) {
