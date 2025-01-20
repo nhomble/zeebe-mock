@@ -2,6 +2,7 @@ import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import java.nio.file.Path;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ public class IntegrationTest {
   @Test
   void checkTopology() {
     await()
+        .alias("zeebe topology (healthcheck)")
+        .atLeast(Duration.ofSeconds(5))
+        .atMost(Duration.ofSeconds(30))
         .until(
             () -> {
               try {
