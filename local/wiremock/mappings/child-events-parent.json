@@ -1,14 +1,11 @@
 {
   "request": {
     "method": "POST",
-    "url": "/TRIGGER_EVENT"
+    "url": "/CHILD_TRIGGERS_PARENT"
   },
   "response": {
     "jsonBody": {
-      "command": "COMPLETE",
-      "variables": {
-        "child": "trigger event"
-      }
+      "command": "COMPLETE"
     }
   },
   "serveEventListeners": [
@@ -18,8 +15,11 @@
         "BEFORE_RESPONSE_SENT"
       ],
       "parameters": {
-        "messageName": "TEST_EVENT",
+        "messageName": "PARENT_AWAITS_CHILD",
         "correlationKey": "{{ jsonPath request.body '$.variablesAsMap.id' }}",
+        "variables": {
+          "child": "trigger event"
+        },
         "timeToLive": "PT10S"
       }
     }

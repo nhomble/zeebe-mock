@@ -1,13 +1,13 @@
 {
   "request": {
     "method": "POST",
-    "url": "/TRIGGER_CHILD_WORKFLOW"
+    "url": "/PARENT_TRIGGERS_CHILD"
   },
   "response": {
     "jsonBody": {
       "command": "COMPLETE",
       "variables": {
-        "child": "triggered child workflow"
+        "parent": "triggered child workflow"
       }
     }
   },
@@ -18,13 +18,9 @@
         "BEFORE_RESPONSE_SENT"
       ],
       "parameters": {
-        "bpmnProcessId": "SimpleComplete",
+        "bpmnProcessId": "ChildEventsParent",
         "variables": {
-          "parent": {
-            "value": "triggered",
-            "type": "String",
-            "id": "{{ request.id }}"
-          }
+          "id": "{{ jsonPath request.body '$.variablesAsMap.id' }}"
         }
       }
     }
