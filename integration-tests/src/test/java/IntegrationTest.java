@@ -22,8 +22,9 @@ public class IntegrationTest {
   @Container
   static ComposeContainer dc =
       new ComposeContainer(Path.of("..", "local", "docker-compose.integration-test.yaml").toFile())
-          .withLogConsumer("zeebe-mock", new Slf4jLogConsumer(log))
-          .withLogConsumer("zeebe", new Slf4jLogConsumer(log))
+          .withLogConsumer("zeebe-mock", new Slf4jLogConsumer(log).withPrefix("zeebe-mock"))
+          .withLogConsumer("zeebe", new Slf4jLogConsumer(log).withPrefix("zeebe"))
+          .withPull(true)
           .withLocalCompose(true);
 
   static ZeebeClient zeebeClient = ZeebeClient.newClientBuilder().usePlaintext().build();
@@ -32,8 +33,8 @@ public class IntegrationTest {
   void checkTopology() {
     await()
         .alias("zeebe topology (healthcheck)")
-        .atLeast(Duration.ofSeconds(5))
-        .atMost(Duration.ofSeconds(30))
+        .atLeast(Duration.ofSeconds(15))
+        .atMost(Duration.ofSeconds(60))
         .until(
             () -> {
               try {
