@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="GitHub Action">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="GitHub Action" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/github-action.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".github/workflows/maven.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="WireMock stub mapping">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="WireMock stub mapping" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/wiremock-stub-mapping.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="local/wiremock/mappings/complete.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="local/wiremock/mappings/trigger-child-workflow.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
