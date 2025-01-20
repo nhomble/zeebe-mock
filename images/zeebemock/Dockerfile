@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN mvn dependency:go-offline -Dmaven.repo.local=${MAVEN_REPO} --quiet
-RUN mvn clean install -Dmaven.repo.local=${MAVEN_REPO} --quiet -Dmaven.test.skip -DskipTests
+RUN mvn clean install -Dmaven.repo.local=${MAVEN_REPO} --quiet -Dmaven.test.skip -DskipTests -Dfmt.skip
 RUN mvn dependency:build-classpath -Dmdep.outputFile=classpath.txt -Dmaven.repo.local=${MAVEN_REPO} --quiet
 
 FROM eclipse-temurin:21 as runtime
