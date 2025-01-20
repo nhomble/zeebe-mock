@@ -3,6 +3,9 @@ services:
     build:
       context: ..
       dockerfile: ./images/zeebemock/Dockerfile
+    depends_on:
+      - zeebe
+      - wiremock
     environment:
       ZEEBEMOCK_WIREMOCKURI: http://wiremock:8080
 
@@ -21,6 +24,8 @@ services:
     volumes:
       - ./wiremock/mappings:/home/wiremock/mappings
       - ./wiremock/__files:/home/wiremock/__files
+    depends_on:
+      - zeebe
     environment:
       ZEEBE_GRPC_ADDRESS: http://zeebe:26500
       ZEEBE_REST_ADDRESS: http://zeebe:8088
