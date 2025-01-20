@@ -23,7 +23,7 @@ public class IntegrationTest {
   static Path ZEEBE_RESOURCES = PROJECT_ROOT.resolve(Path.of("local", "zeebe-resources"));
 
   static {
-    log.info("PROJECT_ROOT={}", PROJECT_ROOT);
+    log.info("PROJECT_ROOT={}", PROJECT_ROOT.toAbsolutePath());
   }
 
   // create via dc because that's how I am going to debug the compose anyway instead of learning yet
