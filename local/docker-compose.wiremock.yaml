@@ -17,10 +17,7 @@ services:
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     networks:
       - local_camunda-platform
-      - local_default
 
 networks:
   local_camunda-platform:
-    external: true
-  local_default:
     external: true
