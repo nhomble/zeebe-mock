@@ -22,6 +22,10 @@ public class IntegrationTest {
   static Path PROJECT_ROOT = Path.of("..");
   static Path ZEEBE_RESOURCES = PROJECT_ROOT.resolve(Path.of("local", "zeebe-resources"));
 
+  static {
+    log.info("PROJECT_ROOT={}", PROJECT_ROOT);
+  }
+
   // create via dc because that's how I am going to debug the compose anyway instead of learning yet
   // another testcontainer builder syntax
   @Container
