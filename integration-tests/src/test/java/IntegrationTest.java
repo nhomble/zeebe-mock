@@ -39,9 +39,6 @@ public class IntegrationTest {
                   .resolve(Path.of("local", "docker-compose.integration-test.yaml"))
                   .toFile())
           .withCopyFilesInContainer(PROJECT_ROOT.toString())
-          .withLogConsumer("zeebe-mock", new Slf4jLogConsumer(log).withPrefix("zeebe-mock"))
-          .withLogConsumer("zeebe", new Slf4jLogConsumer(log).withPrefix("zeebe"))
-          .withLogConsumer("operate", new Slf4jLogConsumer(log).withPrefix("operate"))
           .withPull(true);
 
   static ZeebeClient zeebeClient = ZeebeClient.newClientBuilder().usePlaintext().build();
