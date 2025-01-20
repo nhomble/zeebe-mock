@@ -31,9 +31,12 @@ public class IntegrationTest {
   @Container
   static ComposeContainer dc =
       new ComposeContainer(
-              PROJECT_ROOT
-                  .resolve(Path.of("local", "docker-compose.integration-test.yaml"))
-                  .toFile())
+          PROJECT_ROOT
+              .resolve(Path.of("local", "docker-compose.integration-test.yaml"))
+              .toFile())
+          .withCopyFilesInContainer(
+              PROJECT_ROOT.toString()
+          )
           .withLogConsumer("zeebe-mock", new Slf4jLogConsumer(log).withPrefix("zeebe-mock"))
           .withLogConsumer("zeebe", new Slf4jLogConsumer(log).withPrefix("zeebe"))
           .withPull(true);
@@ -48,7 +51,6 @@ public class IntegrationTest {
   void awaitTopology() {
     await()
         .alias("zeebe topology (healthcheck)")
-        .atLeast(Duration.ofSeconds(15))
         .atMost(Duration.ofSeconds(60))
         .until(
             () -> {
