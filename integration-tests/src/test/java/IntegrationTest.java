@@ -41,6 +41,7 @@ public class IntegrationTest {
           .withCopyFilesInContainer(PROJECT_ROOT.toString())
           .withLogConsumer("zeebe-mock", new Slf4jLogConsumer(log).withPrefix("zeebe-mock"))
           .withLogConsumer("zeebe", new Slf4jLogConsumer(log).withPrefix("zeebe"))
+          .withLogConsumer("operate", new Slf4jLogConsumer(log).withPrefix("operate"))
           .withPull(true);
 
   static ZeebeClient zeebeClient = ZeebeClient.newClientBuilder().usePlaintext().build();
@@ -56,7 +57,8 @@ public class IntegrationTest {
     // defined in docker-compose.integration-test.yaml
     String operateURL = "http://localhost:8081";
     await("await operate client bootstrap")
-        .atMost(Duration.ofSeconds(30))
+        .atMost(Duration.ofSeconds(60))
+        .pollInterval(Duration.ofSeconds(1))
         .until(
             () -> {
               try {
@@ -77,6 +79,7 @@ public class IntegrationTest {
     await()
         .alias("await zeebe topology (healthcheck) has brokers")
         .atMost(Duration.ofSeconds(60))
+        .pollInterval(Duration.ofSeconds(1))
         .until(
             () -> {
               try {
@@ -92,6 +95,7 @@ public class IntegrationTest {
     long key = event.getProcesses().get(0).getProcessDefinitionKey();
     await("await process definition key=" + key + " exists")
         .atMost(Duration.ofSeconds(60))
+        .pollInterval(Duration.ofSeconds(1))
         .until(
             () -> {
               try {
