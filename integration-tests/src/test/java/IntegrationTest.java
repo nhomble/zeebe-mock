@@ -26,9 +26,10 @@ public class IntegrationTest {
   // another testcontainer builder syntax
   @Container
   static ComposeContainer dc =
-      new ComposeContainer(PROJECT_ROOT
-          .resolve(Path.of("local", "docker-compose.integration-test.yaml"))
-          .toFile())
+      new ComposeContainer(
+              PROJECT_ROOT
+                  .resolve(Path.of("local", "docker-compose.integration-test.yaml"))
+                  .toFile())
           .withLogConsumer("zeebe-mock", new Slf4jLogConsumer(log).withPrefix("zeebe-mock"))
           .withLogConsumer("zeebe", new Slf4jLogConsumer(log).withPrefix("zeebe"))
           .withPull(true);
