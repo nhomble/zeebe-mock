@@ -34,7 +34,7 @@ public class ZeebeMockMappingsLoaderExtension implements MappingsLoaderExtension
 
       zeebeMockEnhanced.setRequest(
           newRequestPattern(
-              RequestMethod.POST, WireMock.urlEqualTo("/" + stubParser.parseJobType(stub)))
+                  RequestMethod.POST, WireMock.urlEqualTo("/" + stubParser.parseJobType(stub)))
               .build());
 
       stubMappings.addMapping(zeebeMockEnhanced);

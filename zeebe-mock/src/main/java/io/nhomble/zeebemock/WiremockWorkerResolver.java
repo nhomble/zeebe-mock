@@ -1,6 +1,5 @@
 package io.nhomble.zeebemock;
 
-
 import com.github.tomakehurst.wiremock.admin.model.ListStubMappingsResult;
 import com.github.tomakehurst.wiremock.client.HttpAdminClient;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
