@@ -10,7 +10,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.nhomble</groupId>
     <artifactId>camunda-client-wiremock-extension</artifactId>
     <version>1.0-SNAPSHOT</version>
 
