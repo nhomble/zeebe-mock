@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Wiremock Remote Debug" type="Remote">
+  <configuration default="false" name="Wiremock Remote Debug (Camunda Client)" type="Remote">
     <module name="camunda-client-wiremock-extension" />
     <option name="USE_SOCKET_TRANSPORT" value="true" />
     <option name="SERVER_MODE" value="false" />

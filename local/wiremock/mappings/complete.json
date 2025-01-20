@@ -1,8 +1,4 @@
 {
-  "request": {
-    "method": "POST",
-    "url": "/COMPLETE_WORKER"
-  },
   "response": {
     "jsonBody": {
       "command": "COMPLETE",
@@ -13,7 +9,8 @@
   },
   "metadata": {
     "zeebemock": {
-      "enabled": true
+      "enabled": true,
+      "jobType": "COMPLETE_WORKER"
     }
   }
 }

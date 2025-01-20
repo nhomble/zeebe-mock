@@ -13,6 +13,7 @@
         <module>zeebe-mock</module>
         <module>zeebe-mock-worker-standalone</module>
         <module>camunda-client-wiremock-extension</module>
+        <module>zeebe-mock-wiremock-extension</module>
         <module>integration-tests</module>
     </modules>
 

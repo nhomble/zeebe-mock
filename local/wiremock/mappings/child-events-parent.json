@@ -1,8 +1,4 @@
 {
-  "request": {
-    "method": "POST",
-    "url": "/CHILD_TRIGGERS_PARENT"
-  },
   "response": {
     "jsonBody": {
       "command": "COMPLETE"
@@ -26,7 +22,8 @@
   ],
   "metadata": {
     "zeebemock": {
-      "enabled": true
+      "enabled": true,
+      "jobType": "CHILD_TRIGGERS_PARENT"
     }
   }
 }
