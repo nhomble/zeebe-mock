@@ -157,10 +157,25 @@ public class IntegrationTest {
   void simpleThrowWorkflow() {
     deployResource(ZEEBE_RESOURCES.resolve("will-throw.bpmn"));
 
-    ProcessInstanceEvent result =
+    ProcessInstanceResult result =
         zeebeClient
             .newCreateInstanceCommand()
             .bpmnProcessId("WillThrow")
+            .latestVersion()
+            .withResult()
+            .send()
+            .join();
+    assertEquals("present", result.getVariable("test"));
+  }
+
+  @Test
+  void simpleFailureWorkflow() {
+    deployResource(ZEEBE_RESOURCES.resolve("will-fail.bpmn"));
+
+    ProcessInstanceEvent result =
+        zeebeClient
+            .newCreateInstanceCommand()
+            .bpmnProcessId("WillFail")
             .latestVersion()
             .send()
             .join();
@@ -179,7 +194,7 @@ public class IntegrationTest {
                 return false;
               }
               Incident incident = incidents.get(0);
-              return "Error thrown by worker".equals(incident.getMessage());
+              return "Failure message".equals(incident.getMessage());
             });
   }
 }

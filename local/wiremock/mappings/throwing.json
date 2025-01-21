@@ -1,8 +1,8 @@
 {
   "response": {
     "jsonBody": {
-      "command": "FAILURE",
-      "retries": 0,
+      "command": "THROW_ERROR",
+      "errorCode": "MOCKED",
       "errorMessage": "Error thrown by worker"
     }
   },
