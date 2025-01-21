@@ -1,0 +1,15 @@
+{
+  "response": {
+    "jsonBody": {
+      "command": "FAILURE",
+      "retries": 0,
+      "errorMessage": "Error thrown by worker"
+    }
+  },
+  "metadata": {
+    "zeebemock": {
+      "enabled": true,
+      "jobType": "THROW_WORKER"
+    }
+  }
+}
