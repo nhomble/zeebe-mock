@@ -2,7 +2,7 @@
 
 treat zeebe workers as mockable endpoints
 
-[Check the wiki!](https://github.com/nhomble/zeebe-mock/wiki).
+[Check the wiki!](https://github.com/nhomble/zeebe-mock/wiki)
 
 ## artifacts
 
