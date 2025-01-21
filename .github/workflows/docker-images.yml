@@ -56,8 +56,11 @@ jobs:
           context: .
           file: ${{ matrix.image.path }}
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            hombro/${{ matrix.image.name }}:${{ github.sha }}
+            ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          force: true
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
