@@ -1,4 +1,4 @@
-name: Create and publish a Docker image
+name: Create and publish a Docker image (latest)
 on:
   push:
     branches: [ "main" ]
@@ -54,10 +54,8 @@ jobs:
           file: ${{ matrix.image.path }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: hombro/${{ matrix.image.name }}:latest
       - name: Generate artifact attestation
-        # disable until public repo
-        if: false
         uses: actions/attest-build-provenance@v2
         with:
           subject-name: hombro/${{ matrix.image.name }}
