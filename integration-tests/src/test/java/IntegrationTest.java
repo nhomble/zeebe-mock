@@ -4,11 +4,16 @@ import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 import io.camunda.operate.CamundaOperateClient;
 import io.camunda.operate.CamundaOperateClient.Builder;
 import io.camunda.operate.auth.SimpleAuthentication;
+import io.camunda.operate.dto.Incident;
+import io.camunda.operate.search.IncidentFilter;
+import io.camunda.operate.search.SearchQuery;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.response.DeploymentEvent;
+import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
 import io.camunda.zeebe.client.api.response.ProcessInstanceResult;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -146,5 +151,35 @@ public class IntegrationTest {
     assertEquals(id, result.getVariable("id"));
     assertEquals("triggered child workflow", result.getVariable("parent"));
     assertEquals("trigger event", result.getVariable("child"));
+  }
+
+  @Test
+  void simpleThrowWorkflow() {
+    deployResource(ZEEBE_RESOURCES.resolve("will-throw.bpmn"));
+
+    ProcessInstanceEvent result =
+        zeebeClient
+            .newCreateInstanceCommand()
+            .bpmnProcessId("WillThrow")
+            .latestVersion()
+            .send()
+            .join();
+
+    IncidentFilter filter = new IncidentFilter();
+    filter.setProcessInstanceKey(result.getProcessInstanceKey());
+    SearchQuery query = new SearchQuery();
+    query.setFilter(filter);
+
+    await()
+        .pollInterval(Duration.ofSeconds(1))
+        .until(
+            () -> {
+              List<Incident> incidents = operateClient.searchIncidents(query);
+              if (incidents.size() != 1) {
+                return false;
+              }
+              Incident incident = incidents.get(0);
+              return "Error thrown by worker".equals(incident.getMessage());
+            });
   }
 }
