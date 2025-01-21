@@ -1,6 +1,8 @@
 # zeebe-mock
 
-bridge the zeebe runtime with wiremock via the ultimate interface that is HTTP
+treat zeebe workers as mockable endpoints
+
+[Check the wiki!](https://github.com/nhomble/zeebe-mock/wiki).
 
 ## artifacts
 
