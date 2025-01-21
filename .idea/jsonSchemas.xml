@@ -14,6 +14,9 @@
                   <Item>
                     <option name="path" value=".github/workflows/maven.yml" />
                   </Item>
+                  <Item>
+                    <option name="path" value=".github/workflows/docker-images.yml" />
+                  </Item>
                 </list>
               </option>
             </SchemaInfo>
