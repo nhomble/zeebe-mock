@@ -13,9 +13,26 @@
       <bpmn:outgoing>Flow_16zz9k9</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_16zz9k9" sourceRef="Activity_1ufz0st" targetRef="Event_1c9t655" />
+    <bpmn:boundaryEvent id="Event_0uz0ezx" attachedToRef="Activity_1ufz0st">
+      <bpmn:outgoing>Flow_0wx0ka6</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0p7nu0k" errorRef="Error_0g5s801" />
+    </bpmn:boundaryEvent>
     <bpmn:endEvent id="Event_1c9t655">
       <bpmn:incoming>Flow_16zz9k9</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0bpc1tx" errorRef="Error_0eky8mh" />
     </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0wx0ka6" sourceRef="Event_0uz0ezx" targetRef="Activity_0sja2bh" />
+    <bpmn:endEvent id="Event_14it6yv">
+      <bpmn:incoming>Flow_0t91c41</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0t91c41" sourceRef="Activity_0sja2bh" targetRef="Event_14it6yv" />
+    <bpmn:scriptTask id="Activity_0sja2bh" name="Made it">
+      <bpmn:extensionElements>
+        <zeebe:script expression="=&#34;present&#34;" resultVariable="test" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0wx0ka6</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t91c41</bpmn:outgoing>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmn:error id="Error_0eky8mh" name="WILL_THROW_FAILED" errorCode="UNEXPECTED_FAILURE" />
   <bpmn:error id="Error_0g5s801" name="EXPECTED_ERROR" errorCode="MOCKED" />
@@ -28,8 +45,18 @@
         <dc:Bounds x="270" y="77" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1g5gift_di" bpmnElement="Event_1c9t655">
+      <bpmndi:BPMNShape id="Event_0ley5ve_di" bpmnElement="Event_1c9t655">
         <dc:Bounds x="432" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14it6yv_di" bpmnElement="Event_14it6yv">
+        <dc:Bounds x="552" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00vbv1r_di" bpmnElement="Activity_0sja2bh">
+        <dc:Bounds x="400" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1c0jmr9_di" bpmnElement="Event_0uz0ezx">
+        <dc:Bounds x="312" y="139" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0vwi0h1_di" bpmnElement="Flow_0vwi0h1">
         <di:waypoint x="215" y="117" />
@@ -38,6 +65,15 @@
       <bpmndi:BPMNEdge id="Flow_16zz9k9_di" bpmnElement="Flow_16zz9k9">
         <di:waypoint x="370" y="117" />
         <di:waypoint x="432" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wx0ka6_di" bpmnElement="Flow_0wx0ka6">
+        <di:waypoint x="330" y="175" />
+        <di:waypoint x="330" y="240" />
+        <di:waypoint x="400" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t91c41_di" bpmnElement="Flow_0t91c41">
+        <di:waypoint x="500" y="240" />
+        <di:waypoint x="552" y="240" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
