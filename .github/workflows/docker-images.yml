@@ -48,6 +48,7 @@ jobs:
           # https://github.com/docker/metadata-action?tab=readme-ov-file#latest-tag
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -61,7 +62,6 @@ jobs:
             hombro/${{ matrix.image.name }}:${{ github.sha }}
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          force: true
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
         with:
