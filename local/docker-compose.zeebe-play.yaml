@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  zeebe-play:
+    image: ghcr.io/camunda-community-hub/zeebe-play:latest
+    ports:
+      - "26500:26500"
+      - "9090:8080"
+  zeebe-mock:
+    image: hombro/zeebe-mock:latest
+    depends_on:
+      - zeebe-play
+      - wiremock
+    environment:
+      ZEEBEMOCK_WIREMOCKURI: http://wiremock:8080
+
+      CAMUNDA_CLIENT_MODE: self-managed
+      CAMUNDA_CLIENT_ZEEBE_ENABLED: true
+      CAMUNDA_CLIENT_ZEEBE_GRPC_ADDRESS: http://zeebe-play:26500
+      CAMUNDA_CLIENT_ZEEBE_PREFER_REST_OVER_GRPC: false
+  wiremock:
+    image: hombro/zeebe-mock-wiremock:latest
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+      - ./wiremock/__files:/home/wiremock/__files
+    depends_on:
+      - zeebe-play
+    environment:
+      ZEEBE_GRPC_ADDRESS: http://zeebe-play:26500
+      ZEEBE_PREFER_REST_OVER_GRPC: false
+      ZEEBE_INSECURE_CONNECTION: true
