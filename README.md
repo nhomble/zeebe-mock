@@ -2,6 +2,10 @@
 
 treat zeebe workers as mockable endpoints
 
+![overview](./docs/overview.png)
+
+## documentation
+
 [Check the wiki!](https://github.com/nhomble/zeebe-mock/wiki)
 
 ## examples
