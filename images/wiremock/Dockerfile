@@ -1,6 +1,17 @@
 FROM maven:3.9.6-eclipse-temurin-21-jammy AS build
 
 WORKDIR /app
+
+# copy only the poms first so dependency resolution is cached across builds
+# whose source changed but whose dependencies didn't
+COPY pom.xml .
+COPY zeebe-mock/pom.xml zeebe-mock/pom.xml
+COPY zeebe-mock-worker-standalone/pom.xml zeebe-mock-worker-standalone/pom.xml
+COPY camunda-client-wiremock-extension/pom.xml camunda-client-wiremock-extension/pom.xml
+COPY zeebe-mock-wiremock-extension/pom.xml zeebe-mock-wiremock-extension/pom.xml
+COPY integration-tests/pom.xml integration-tests/pom.xml
+RUN mvn dependency:go-offline --quiet
+
 COPY . .
 RUN mvn clean package --quiet -Dmaven.test.skip -DskipTests -Dfmt.skip
 
