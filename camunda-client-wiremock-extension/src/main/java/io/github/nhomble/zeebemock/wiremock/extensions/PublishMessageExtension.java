@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.extension.Parameters;
 import com.github.tomakehurst.wiremock.extension.ServeEventListener;
 import com.github.tomakehurst.wiremock.extension.WireMockServices;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
+import com.google.common.base.Preconditions;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.command.PublishMessageCommandStep1;
 import java.time.Duration;
@@ -36,6 +37,7 @@ public class PublishMessageExtension implements ServeEventListener {
 
   @Override
   public void beforeResponseSent(ServeEvent serveEvent, Parameters parameters) {
+    Preconditions.checkArgument(parameters.containsKey("messageName"), "messageName is required");
     boolean hasCorrelationKey = parameters.get("correlationKey") != null;
     var withMessage =
         zeebeClient.newPublishMessageCommand().messageName(parameters.getString("messageName"));
