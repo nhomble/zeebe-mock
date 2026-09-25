@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/broken"
+  },
+  "response": {
+    "status": 200
+  },
+  "metadata": {
+    "zeebemock": {
+      "enabled": true
+    }
+  }
+}

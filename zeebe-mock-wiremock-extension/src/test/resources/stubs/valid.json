@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/ignored"
+  },
+  "response": {
+    "status": 200
+  },
+  "metadata": {
+    "zeebemock": {
+      "enabled": true,
+      "jobType": "payment"
+    }
+  }
+}

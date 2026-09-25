@@ -3,6 +3,7 @@ package io.github.nhomble.zeebemock;
 import com.github.tomakehurst.wiremock.admin.model.ListStubMappingsResult;
 import com.github.tomakehurst.wiremock.client.HttpAdminClient;
 import com.github.tomakehurst.wiremock.http.RequestMethod;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,15 @@ public class WiremockWorkerResolver implements WorkerResolver {
   @Override
   public List<WorkerDefinition> resolve() {
     ListStubMappingsResult stubs = stubParser.findAllStubsByMetadata(httpAdminClient);
+    return resolve(stubs.getMappings());
+  }
+
+  List<WorkerDefinition> resolve(List<StubMapping> stubs) {
     Map<String, List<String>> relevantMappings =
-        stubs.getMappings().stream()
+        stubs.stream()
             .filter(stubParser::isZeebeMockEnabled)
+            // skips (and logs) enabled stubs without a jobType so toMap never sees a null key
+            .filter(stubParser::hasValidJobType)
             .filter(stub -> RequestMethod.POST.equals(stub.getRequest().getMethod()))
             .collect(
                 Collectors.toMap(
