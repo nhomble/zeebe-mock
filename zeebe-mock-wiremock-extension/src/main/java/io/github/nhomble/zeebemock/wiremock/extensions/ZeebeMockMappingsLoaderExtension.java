@@ -25,6 +25,8 @@ public class ZeebeMockMappingsLoaderExtension implements MappingsLoaderExtension
     List<StubMapping> relevantMappings =
         stubMappings.getAll().stream()
             .filter(stubParser::isZeebeMockEnabled)
+            // skips (and logs) enabled stubs missing a jobType
+            .filter(stubParser::hasValidJobType)
             .collect(Collectors.toList());
 
     for (StubMapping stub : relevantMappings) {
