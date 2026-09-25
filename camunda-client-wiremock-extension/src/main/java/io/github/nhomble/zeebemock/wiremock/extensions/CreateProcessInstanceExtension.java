@@ -19,7 +19,11 @@ public class CreateProcessInstanceExtension implements ServeEventListener {
   private final ObjectMapper objectMapper;
 
   public CreateProcessInstanceExtension(WireMockServices wireMockServices) {
-    this.zeebeClient = ZeebeClient.newClient();
+    this(wireMockServices, ZeebeClient.newClient());
+  }
+
+  CreateProcessInstanceExtension(WireMockServices wireMockServices, ZeebeClient zeebeClient) {
+    this.zeebeClient = zeebeClient;
     this.wireMockServices = wireMockServices;
     this.objectMapper = new ObjectMapper();
   }
@@ -40,7 +44,7 @@ public class CreateProcessInstanceExtension implements ServeEventListener {
         parameters.containsKey("bpmnProcessId"), "bpmnProcessId is required");
 
     boolean hasVersion = parameters.get("version") != null;
-    boolean hasWithResult = parameters.get("withResult") != null;
+    boolean hasWithResult = Boolean.TRUE.equals(parameters.getBoolean("withResult", false));
     var withProcessId =
         zeebeClient.newCreateInstanceCommand().bpmnProcessId(parameters.getString("bpmnProcessId"));
     Map<String, Object> context =
