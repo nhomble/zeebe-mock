@@ -31,21 +31,37 @@ public class WorkerBootstrap {
 
   @Scheduled(fixedRateString = "#{@zeebeMockProperties.getWorkerRefreshInterval()}")
   void registerWorkers() {
+    // Resolve and open the next generation first so that a failure (e.g. WireMock unreachable)
+    // leaves the current generation of workers polling until the next successful refresh.
+    List<JobWorker> nextWorkers = new ArrayList<>();
+    try {
+      for (WorkerDefinition worker : workerResolver.resolve()) {
+        log.info(
+            "Registering worker jobType={} tenantIds={}",
+            worker.getJobType(),
+            worker.getTenantIds());
+        var building =
+            zeebeClient
+                .newWorker()
+                .jobType(worker.getJobType())
+                .handler(new MockJobHandler(zeebeMockConfigurationProperties.getWiremockURI()));
+        if (!worker.getTenantIds().isEmpty()) {
+          building = building.tenantIds(worker.getTenantIds());
+        }
+        nextWorkers.add(building.open());
+      }
+    } catch (RuntimeException e) {
+      log.warn(
+          "Failed to refresh workers, keeping existing active workers number={}",
+          activeWorkers.size(),
+          e);
+      nextWorkers.forEach(JobWorker::close);
+      throw e;
+    }
+
     log.info("Closing existing active workers number={}", activeWorkers.size());
     activeWorkers.forEach(JobWorker::close);
-    for (WorkerDefinition worker : workerResolver.resolve()) {
-      log.info(
-          "Registering worker jobType={} tenantIds={}", worker.getJobType(), worker.getTenantIds());
-      var building =
-          zeebeClient
-              .newWorker()
-              .jobType(worker.getJobType())
-              .handler(new MockJobHandler(zeebeMockConfigurationProperties.getWiremockURI()));
-      if (!worker.getTenantIds().isEmpty()) {
-        building = building.tenantIds(worker.getTenantIds());
-      }
-      var jobWorker = building.open();
-      activeWorkers.add(jobWorker);
-    }
+    activeWorkers.clear();
+    activeWorkers.addAll(nextWorkers);
   }
 }
