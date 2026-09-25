@@ -1,6 +1,7 @@
 package io.github.nhomble.zeebemock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
 import io.camunda.zeebe.client.api.worker.JobHandler;
@@ -19,7 +20,11 @@ public class MockJobHandler implements JobHandler {
   private final ObjectMapper objectMapper;
 
   public MockJobHandler(URI mockURI) {
-    this(mockURI, new ObjectMapper());
+    this(mockURI, defaultObjectMapper());
+  }
+
+  static ObjectMapper defaultObjectMapper() {
+    return new ObjectMapper().registerModule(new JavaTimeModule());
   }
 
   public MockJobHandler(URI mockURI, ObjectMapper objectMapper) {

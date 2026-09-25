@@ -34,6 +34,8 @@
         <!-- when the unified java client is compatible, we could just consolidate -->
         <camunda-operate.version>8.2.0</camunda-operate.version>
         <wiremock.version>3.10.0</wiremock.version>
+        <!-- match jackson-databind pulled in transitively by zeebe-client-java -->
+        <jackson-datatype-jsr310.version>2.18.2</jackson-datatype-jsr310.version>
         <!-- note whatever camunda.version is on -->
         <spring-boot.version>3.3.7</spring-boot.version>
         <!-- match spring logging -->
@@ -98,6 +100,11 @@
                 <groupId>org.wiremock</groupId>
                 <artifactId>wiremock</artifactId>
                 <version>${wiremock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson-datatype-jsr310.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

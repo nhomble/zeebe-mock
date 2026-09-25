@@ -22,6 +22,11 @@
             <groupId>io.camunda</groupId>
             <artifactId>zeebe-client-java</artifactId>
         </dependency>
+        <!-- needed to deserialize java.time.Duration (FailureResponse.retryBackoff) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
     </dependencies>
     
 </project>
