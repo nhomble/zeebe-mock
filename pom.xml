@@ -6,7 +6,7 @@
 
     <groupId>io.github.nhomble</groupId>
     <artifactId>zeebe-wiremock</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
 
     <name>Zeebe Wiremock</name>
@@ -93,8 +93,12 @@
                         <configuration>
                             <publishingServerId>central</publishingServerId>
                             <centralUrl>https://central.sonatype.com</centralUrl>
-                            <autoPublish>true</autoPublish>
-                            <waitUntil>published</waitUntil>
+                            <!-- first release: land in Central's staging repo for manual review
+                                 rather than going live automatically. Once the process is
+                                 verified, switch autoPublish back to true and waitUntil back to
+                                 published for subsequent releases. -->
+                            <autoPublish>false</autoPublish>
+                            <waitUntil>validated</waitUntil>
                         </configuration>
                     </plugin>
                 </plugins>
