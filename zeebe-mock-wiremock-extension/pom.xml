@@ -15,9 +15,12 @@
 
 
   <dependencies>
+    <!-- provided: this jar is loaded as a WireMock extension into a host process that
+         already has wiremock (and its Jetty/Guava/Jackson deps) on its classpath -->
     <dependency>
       <groupId>org.wiremock</groupId>
       <artifactId>wiremock</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.github.nhomble</groupId>
