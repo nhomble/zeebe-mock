@@ -23,6 +23,18 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <!-- no main sources here, so no javadoc/sources jar is produced; the ossrh
+                 profile's central-publishing-maven-plugin bundles the whole reactor and
+                 replaces the deploy goal above, so it needs its own skip -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.7.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <skipPublishing>true</skipPublishing>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

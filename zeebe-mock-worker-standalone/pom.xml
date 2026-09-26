@@ -13,6 +13,23 @@
     <artifactId>zeebe-mock-worker-standalone</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <build>
+        <plugins>
+            <!-- this is a Spring Boot application, not a library consumers pull from
+                 Maven Central; the ossrh profile's central-publishing-maven-plugin
+                 bundles the whole reactor by default, so exclude it explicitly -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.7.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <skipPublishing>true</skipPublishing>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
