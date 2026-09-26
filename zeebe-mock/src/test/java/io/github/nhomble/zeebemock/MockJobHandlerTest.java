@@ -2,6 +2,7 @@ package io.github.nhomble.zeebemock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sun.net.httpserver.HttpServer;
@@ -52,10 +53,28 @@ public class MockJobHandlerTest {
   }
 
   private URI serve(String body) throws Exception {
+    serve("", body, new ArrayList<>());
+    return URI.create("http://localhost:" + server.getAddress().getPort() + "/");
+  }
+
+  /**
+   * Serves {@code body} at {@code <prefix>/<JOB_TYPE>}, records every received request path, and
+   * returns the base URI {@code http://localhost:<port><prefix>} (no trailing slash).
+   */
+  private URI serve(String prefix, String body, List<String> receivedPaths) throws Exception {
     server = HttpServer.create(new InetSocketAddress("localhost", 0), 0);
+    // root context catches mis-routed requests so the test sees the wrong path instead of a hang
     server.createContext(
-        "/" + JOB_TYPE,
+        "/",
         exchange -> {
+          receivedPaths.add(exchange.getRequestURI().getPath());
+          exchange.sendResponseHeaders(404, -1);
+          exchange.close();
+        });
+    server.createContext(
+        prefix + "/" + JOB_TYPE,
+        exchange -> {
+          receivedPaths.add(exchange.getRequestURI().getPath());
           byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
           exchange.getResponseHeaders().add("Content-Type", "application/json");
           exchange.sendResponseHeaders(200, bytes.length);
@@ -63,7 +82,7 @@ public class MockJobHandlerTest {
           exchange.close();
         });
     server.start();
-    return URI.create("http://localhost:" + server.getAddress().getPort() + "/");
+    return URI.create("http://localhost:" + server.getAddress().getPort() + prefix);
   }
 
   /** Proxy that records every call and returns a further recording proxy for fluent builders. */
@@ -174,5 +193,56 @@ public class MockJobHandlerTest {
     assertEquals(JOB_KEY, find(calls, "newThrowErrorCommand").args()[0]);
     assertEquals(Map.of("a", 1), find(calls, "variables").args()[0]);
     assertTrue(names(calls).contains("send"));
+  }
+
+  @Test
+  void baseUriWithPathAndNoTrailingSlashKeepsPrefix() throws Exception {
+    List<String> paths = new ArrayList<>();
+    URI uri = serve("/wiremock", "{\"command\":\"COMPLETE\",\"variables\":{}}", paths);
+    assertFalse(uri.getPath().endsWith("/"), uri.toString());
+    List<Call> calls = new ArrayList<>();
+
+    new MockJobHandler(uri).handle(recorder(JobClient.class, calls), job());
+
+    assertEquals(List.of("/wiremock/" + JOB_TYPE), paths);
+    assertEquals(JOB_KEY, find(calls, "newCompleteCommand").args()[0]);
+  }
+
+  @Test
+  void endpointForHandlesSlashesPathsAndColons() {
+    assertEquals(
+        URI.create("http://h:8080/wiremock/job"),
+        MockJobHandler.endpointFor(URI.create("http://h:8080/wiremock"), "job"));
+    assertEquals(
+        URI.create("http://h:8080/wiremock/job"),
+        MockJobHandler.endpointFor(URI.create("http://h:8080/wiremock/"), "job"));
+    assertEquals(
+        URI.create("http://h:8080/job"),
+        MockJobHandler.endpointFor(URI.create("http://h:8080"), "job"));
+    assertEquals(
+        URI.create("http://h:8080/job"),
+        MockJobHandler.endpointFor(URI.create("http://h:8080/"), "job"));
+    // URI.resolve would treat this as an absolute URI with scheme "io.camunda"
+    assertEquals(
+        URI.create("http://h/io.camunda:http-json:1"),
+        MockJobHandler.endpointFor(URI.create("http://h"), "io.camunda:http-json:1"));
+  }
+
+  @Test
+  void httpClientIsSharedAndReusedAcrossHandleCalls() throws Exception {
+    List<String> paths = new ArrayList<>();
+    URI uri = serve("", "{\"command\":\"COMPLETE\",\"variables\":{}}", paths);
+    MockJobHandler handler = new MockJobHandler(uri);
+    var client = handler.httpClient();
+
+    for (int i = 0; i < 3; i++) {
+      handler.handle(recorder(JobClient.class, new ArrayList<>()), job());
+    }
+
+    assertEquals(3, paths.size());
+    assertSame(client, handler.httpClient());
+    // handlers are rebuilt on every worker refresh; they must not each create a client
+    assertSame(client, new MockJobHandler(uri).httpClient());
+    assertTrue(client.connectTimeout().isPresent());
   }
 }
