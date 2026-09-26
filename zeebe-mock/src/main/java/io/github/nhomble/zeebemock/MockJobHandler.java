@@ -80,6 +80,7 @@ public class MockJobHandler implements JobHandler {
           .newThrowErrorCommand(job.getKey())
           .errorCode(errorResponse.getErrorCode())
           .errorMessage(errorResponse.getErrorMessage())
+          .variables(errorResponse.getVariables())
           .send()
           .join();
     } else if (FailureResponse.COMMAND.equalsIgnoreCase(wiremockResponse.command())) {
