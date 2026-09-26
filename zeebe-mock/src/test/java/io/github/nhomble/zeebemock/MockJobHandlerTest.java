@@ -160,4 +160,19 @@ public class MockJobHandlerTest {
     assertTrue(names(calls).contains("send"));
     assertFalse(names(calls).contains("newFailCommand"));
   }
+
+  @Test
+  void throwErrorCommandSendsVariables() throws Exception {
+    URI uri =
+        serve(
+            "{\"command\":\"THROW_ERROR\",\"errorCode\":\"ERR\",\"errorMessage\":\"boom\","
+                + "\"variables\":{\"a\":1}}");
+    List<Call> calls = new ArrayList<>();
+
+    new MockJobHandler(uri).handle(recorder(JobClient.class, calls), job());
+
+    assertEquals(JOB_KEY, find(calls, "newThrowErrorCommand").args()[0]);
+    assertEquals(Map.of("a", 1), find(calls, "variables").args()[0]);
+    assertTrue(names(calls).contains("send"));
+  }
 }

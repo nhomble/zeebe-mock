@@ -9,6 +9,7 @@ public class ErrorResponse implements ZeebeWiremockResponse {
   public static final String COMMAND = "THROW_ERROR";
   private String errorCode = "DEFAULT_ERROR_CODE";
   private String errorMessage = "DEFAULT_ERROR_MESSAGE";
+  private Map<String, Object> variables = new HashMap<>();
 
   public String getErrorCode() {
     return errorCode;
@@ -21,8 +22,6 @@ public class ErrorResponse implements ZeebeWiremockResponse {
   public Map<String, Object> getVariables() {
     return variables;
   }
-
-  private Map<String, Object> variables = new HashMap<>();
 
   @Override
   public String command() {
